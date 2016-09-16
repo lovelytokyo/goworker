@@ -1,0 +1,30 @@
+hash: 7f9503e453b10de08617fbc9e876e3eff4cfb3ce838d2c4f980f356e6ae36e70
+updated: 2016-09-16T14:24:00.013958985+09:00
+imports:
+- name: github.com/benmanns/goworker
+  version: 3473b2db0bbaddbd6e44927891f31bf3763bb1db
+- name: github.com/cihub/seelog
+  version: 752ef646ce438bc649b2bb565188471879185c33
+- name: github.com/garyburd/redigo
+  version: ffa8d46ada782d81cfda81a0fbd9f45ceae448e8
+  subpackages:
+  - redis
+  - internal
+- name: github.com/golang/glog
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
+- name: github.com/k0kubun/pp
+  version: f5dce6ed0ccf6c350f1679964ff6b61f3d6d2033
+- name: github.com/mattn/go-colorable
+  version: ed8eb9e318d7a84ce5915b495b7d35e0cfe7b5a8
+- name: github.com/youtube/vitess
+  version: 4edf1b231a308db3b6b708d602c25c5ef38d6e54
+  subpackages:
+  - go/pools
+  - go/sync2
+  - go/acl
+  - go/cache
+- name: golang.org/x/net
+  version: 71a035914f99bb58fe82eac0f1289f10963d876c
+  subpackages:
+  - context
+devImports: []
