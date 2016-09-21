@@ -73,18 +73,6 @@ mac os x Yosemite memory 16GB
         - [2]: video_url
     
 ## 検証結果
-
-### python直実行
-- 30個の動画を8プロセスたちあげて、CPU７０〜８０％ 。実行時間：40sec
-- 1000個の動画を８プロセスたちあげて、CPU75〜８５％。実行時間：1093.41sec (18分)
-　→ １本辺り約１秒
-- 1000個の動画を４プロセスたちあげて、CPUが45~６５％　実行時間：2128.97sec (35分)
-　→ １本辺り約２秒
-
-### goworkerでredisからdequeueして実行時
-
-- https://github.com/mnuma/goapp-example/tree/feature_worker
-
  - 7プロセス→CPU使用率60%くらい、26プロセス→CPU使用率80%くらい
  - 300本処理に16分 
  　→1本辺り、3.2秒
