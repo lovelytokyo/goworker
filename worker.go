@@ -14,7 +14,7 @@ func myFunc(queue string, args ...interface{}) error {
 	if id, ok := args[1].(string); ok {
 		if url, ok := args[2].(string); ok {
 			// 動画ファイルダウンロードして {id}.mpegで保存する
-			downloaded := downloadFromUrl(url, args[0], id)
+			downloaded := downloadFromUrl(url, id)
 			if downloaded == false {
 				fmt.Println("failed download video")
 				return nil
@@ -48,9 +48,7 @@ func main() {
 	}
 }
 
-func downloadFromUrl(url, ad_group_id, id string) bool {
-
-	// TODO: ad_group_idでディレクトリーがなければ作る
+func downloadFromUrl(url, id string) bool {
 
 	fmt.Printf("Downloading %s to %s\n", url, id)
 	fileName := fmt.Sprintf("./video/%s.%s", id, "mpeg")
