@@ -1,30 +1,39 @@
 package main
 
 import (
-	"fmt"
 	"os"
-	"net/http"
 	"io"
+	"fmt"
+	"os/exec"
+	"net/http"
+
 	"github.com/benmanns/goworker"
 )
 
 func myFunc(queue string, args ...interface{}) error {
-	fmt.Printf("From %s, %v\n", queue, args)
-	fmt.Printf("group_id : %s\n", args[0])
-	fmt.Printf("id : %s\n", args[1])
-	fmt.Printf("url : %s\n", args[2])
-
 	if id, ok := args[1].(string); ok {
 		if url, ok := args[2].(string); ok {
 			// 動画ファイルダウンロードして {id}.mpegで保存する
-			downloadFromUrl(url, id)
+			downloaded := downloadFromUrl(url, args[0], id)
+			if downloaded == false {
+				fmt.Println("failed download video")
+				return nil
+			}
+
+			// ./generator <video> <interval> <width> <height> <columns> <output>
+			cmd := fmt.Sprintf("generator ./video/%s.mpeg 2 126 73 4 ./img/%s.jpg", id, id)
+			fmt.Printf("cmd: %s\n", cmd)
+
+			_, err := exec.Command("bash", "-c", cmd).Output()
+			if err != nil {
+				fmt.Printf("execute generator err : %s", err)
+				return nil
+			}
+
 		} else {
 			fmt.Println("failed read url")
 		}
 	}
-
-	// TODO：動画からサムネイル生成する
-	// ./generator ./{id}.mpeg 2 126 73 4 ./thmbnails/{id}.jpg
 
 	return nil
 }
@@ -39,31 +48,35 @@ func main() {
 	}
 }
 
-func downloadFromUrl(url, id string) {
+func downloadFromUrl(url, ad_group_id, id string) bool {
+
+	// TODO: ad_group_idでディレクトリーがなければ作る
+
 	fmt.Printf("Downloading %s to %s\n", url, id)
-	fileName := fmt.Sprintf("%s.%s", id, "mpeg")
+	fileName := fmt.Sprintf("./video/%s.%s", id, "mpeg")
 
 	output, err := os.Create(fileName)
 	if err != nil {
 		fmt.Printf("Error while creating %s : %s\n", url, err)
-		return
+		return false
 	}
 	defer output.Close()
 
 	response, err := http.Get(url)
 	if err != nil {
 		fmt.Printf("Error while downloading $s : %s\n", url, err)
-		return
+		return false
 	}
 	defer response.Body.Close()
 
 	n, err := io.Copy(output, response.Body)
 	if err != nil {
 		fmt.Printf("Error while Copy $s : %s\n", url, err)
-		return
+		return false
 	}
 
 	fmt.Println(n, "bytes downloaded.")
+	return true
 }
 
 /*
